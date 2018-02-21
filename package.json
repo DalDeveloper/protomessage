@@ -1,0 +1,16 @@
+{
+  "name": "angularfire-proto",
+  "version": "1.0.0",
+  "description": "Basic angularfire samples",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "subhasish.bose@digitalavenues.com",
+  "license": "ISC",
+  "dependencies": {
+    "angular": "^1.6.8",
+    "angularfire": "^2.3.0",
+    "lodash": "^4.17.5"
+  }
+}

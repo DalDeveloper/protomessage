@@ -1,0 +1,123 @@
+<html>
+    <head>
+    <!-- Material Design Lite -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.orange-indigo.min.css">
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+
+    <!-- App Styling -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
+    <link rel="stylesheet" href="style.css?v=1">
+    <link href="./bower_components/dropzone/dist/dropzone.css" type="text/css" rel="stylesheet" />
+   
+    </head>
+    <body ng-app="fireApp">
+    <div ng-controller="ChatCtrl" class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-header" ng-init="loadMessages()">
+
+        <!-- Header section containing logo -->
+        <header class="mdl-layout__header mdl-color-text--white mdl-color--light-blue-700">
+            <div class="mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-grid">
+                <div class="mdl-layout__header-row mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop">
+                    <h3><i class="material-icons">chat_bubble_outline</i> BV Message Centre</h3>
+                </div>
+            </div>
+        </header>
+
+        <main class="mdl-layout__content mdl-color--grey-100">
+            <div id="messages-card-container" class="mdl-cell mdl-cell--12-col mdl-grid">
+                <div id="proposal-list" class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--3-col-tablet mdl-cell--3-col-desktop"></div>
+                <!-- Messages container -->
+                <div id="messages-card" ng-show = "!showPreviewZone" class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--6-col-tablet mdl-cell--6-col-desktop">
+                    <div class="mdl-card__supporting-text mdl-color-text--grey-600">
+                    <div id="messages">
+                        <span id="message-filler"></span>
+                    </div>
+                    <form id="message-form" action="#">
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <input class="mdl-textfield__input" type="text" id="message">
+                        <label class="mdl-textfield__label" for="message">Message...</label>
+                        </div>
+                        <button id="submit" disabled type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                        Send
+                        </button>
+                    </form>
+                    <div id="image-form">
+                       <button id="submitImage" title="Add an image" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--amber-400 mdl-color-text--white">
+                            <i class="material-icons">image</i> 
+                    </div>
+                    <!-- <form id="image-form" action="#">
+                        <input id="mediaCapture" type="file" accept="image/*,capture=camera">
+                        <button id="submitImage" title="Add an image" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--amber-400 mdl-color-text--white">
+                        <i class="material-icons">image</i>
+                        </button>
+                    </form> -->
+                    </div>
+                </div>
+                <div id="preview-card" ng-show = "showPreviewZone" class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--6-col-tablet mdl-cell--6-col-desktop">
+                   
+                    <header class="mdl-color--amber-400 mdl-color-text--white">
+                        <div class="previewBtnContainer">
+                            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--white">
+                                    <i class="material-icons">close</i>
+                            </button>
+                            <span class="">Preview</span>
+                        </div>
+                    </header>
+
+                    <div class="collectionContainer"  style="overflow:scroll;">
+                     <div id="fileViewer"></div>
+                      <div id="fileList"></div>   
+                      <div class="divider"></div>
+                      <div id="contentBox">
+                            <a class="btn-floating btn-large waves-effect waves-light green"><i class="material-icons">send</i></a>
+                        </div>      
+                    </div>
+                   
+                    </div>
+                            
+
+                            <!-- <div class="dz-preview dz-file-preview">
+                                <div class="dz-details">
+                                    <div class="dz-filename"><span data-dz-name></span></div>
+                                    <div class="dz-size" data-dz-size></div>
+                                    <img data-dz-thumbnail />
+                                </div>
+                                <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
+                                <div class="dz-success-mark"><span>✔</span></div>
+                                <div class="dz-error-mark"><span>✘</span></div>
+                                <div class="dz-error-message"><span data-dz-errormessage></span></div>
+                            </div> -->
+                        
+                </div>
+
+                <div id="user-list" class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--3-col-tablet mdl-cell--3-col-desktop"></div>
+
+            </div>
+        </main>
+        </div>
+
+  <!-- Compiled and minified JavaScript -->
+  <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.6.6/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyB_U2OndP3kFVg_35ubBAjU6ojVrpumGKc",
+            authDomain: "bv-proto.firebaseapp.com",
+            databaseURL: "https://bv-proto.firebaseio.com",
+            projectId: "bv-proto",
+            storageBucket: "bv-proto.appspot.com",
+            messagingSenderId: "858113813809"
+        };
+        firebase.initializeApp(config);
+    </script> 
+    <script src="node_modules/angular/angular.js"></script>
+    <script src="node_modules/angularfire/dist/angularfire.js"></script>
+    <script src="./bower_components/filereader.js/filereader.js"></script>
+    <script src="./bower_components/dropzone/dist/dropzone.js"></script>
+    <script src="js/app.js"></script>   
+    </body>
+
+</html>
